@@ -1,14 +1,58 @@
 
-# Secure_Communications
-This repository is designed as part of a military-grade system. It is self-sufficient, secure, and user-friendly.
-## Features
-- Event-driven architecture with Kafka and RabbitMQ
-- AI and ML integration with OpenCV, ONNX, and NVIDIA Triton
-- Offline support with auto-save and seamless synchronization
-- Advanced security measures: Zero Trust and Quantum-Safe Encryption
-- Fully compliant with ISO 27001, GDPR, and DARPA standards
-## Getting Started
-Follow the steps below to set up and use this system.
-1. Install dependencies using `requirements.txt`.
-2. Run the setup scripts in the `configurations` folder.
-3. Use `README.md` for detailed usage instructions.
+# Secure Communications
+
+## Overview
+The Secure Communications repository has been enhanced to include advanced encryption, real-time communication, and AI-powered analysis.
+
+### New Features
+1. **AI-Powered Message Analysis**
+    - Endpoint: `/analyze_message`
+    - Method: `POST`
+    - Description: Analyzes the sentiment and intent of messages.
+    - Example Request:
+      ```json
+      {
+          "message": "Urgent: This is a critical situation."
+      }
+      ```
+    - Example Response:
+      ```json
+      {
+          "analysis": [{"label": "NEGATIVE", "score": 0.98}]
+      }
+      ```
+
+2. **Secure Messaging**
+    - Endpoint: `/secure_message`
+    - Method: `POST`
+    - Description: Encrypts messages using post-quantum encryption.
+    - Example Request:
+      ```json
+      {
+          "peer_public_key": "abcd1234...",
+          "message": "Secure message content"
+      }
+      ```
+    - Example Response:
+      ```json
+      {
+          "encrypted_message": "ef5678...",
+          "iv": "123456..."
+      }
+      ```
+
+3. **Real-Time Communication**
+    - Enables real-time messaging using Flask-SocketIO.
+    - Events:
+      - `send_message`: Send a message to connected clients.
+      - `receive_message`: Receive broadcasted messages.
+
+### Getting Started
+1. Install dependencies from `requirements.txt`:
+    ```bash
+    pip install -r requirements.txt
+    ```
+2. Run the application:
+    ```bash
+    python app.py
+    ```

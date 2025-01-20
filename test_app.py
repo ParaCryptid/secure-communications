@@ -1,39 +1,27 @@
 
-import pytest
-from flask import Flask
+import unittest
 from app import app
 
-@pytest.fixture
-def client():
-    with app.test_client() as client:
-        yield client
+class SecureCommunicationsTests(unittest.TestCase):
+    def setUp(self):
+        self.app = app.test_client()
+        self.app.testing = True
 
-# Test the home route
-def test_home(client):
-    response = client.get('/')
-    assert response.status_code == 200
-    assert b'Secure Communications System is fully functional.' in response.data
+    def test_home(self):
+        response = self.app.get('/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("Secure Communications", response.get_json()["message"])
 
-# Test the send_message route
-def test_send_message(client):
-    data = {"message": "Confidential message"}
-    response = client.post('/send_message', json=data)
-    assert response.status_code == 200
-    assert "encrypted_message" in response.get_json()
+    def test_analyze_message(self):
+        response = self.app.post('/analyze_message', json={"message": "This is urgent."})
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("analysis", response.get_json())
 
-# Test the receive_message route
-def test_receive_message(client):
-    data = {"message": "Confidential message"}
-    send_response = client.post('/send_message', json=data)
-    encrypted_message = send_response.get_json()["encrypted_message"]
+    def test_secure_message(self):
+        message_data = {"peer_public_key": "abcd1234", "message": "Test secure message"}
+        response = self.app.post('/secure_message', json=message_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("encrypted_message", response.get_json())
 
-    receive_response = client.post('/receive_message', json={"encrypted_message": encrypted_message})
-    assert receive_response.status_code == 200
-    assert receive_response.get_json()["decrypted_message"] == "Confidential message"
-
-# Test the log_message route
-def test_log_message(client):
-    data = {"message": "Log this message"}
-    response = client.post('/log_message', json=data)
-    assert response.status_code == 200
-    assert "Message logged to blockchain." in response.get_json()["status"]
+if __name__ == '__main__':
+    unittest.main()
