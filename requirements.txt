@@ -1,9 +1,2 @@
-
-    flask
-    pytest
-    cryptography
-    tensorflow
-transformers
-pycryptodome
-flask-socketio
-cryptography>=3.4.7
+# Example dependency list
+pytest==7.4.0
